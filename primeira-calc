@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            font-family: 'Courier New', Courier, monospace;
+            padding: 20px;
+            color: aliceblue;
+            letter-spacing: 4px;
+        }
+
+        .fundo {
+            background-color: rgb(43, 41, 41);
+            height: 100vh;
+        }
+
+        .calculadora {
+            color: aliceblue;
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 14px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+        }
+
+        .botao {
+            background-color: rgb(54, 54, 54);
+            width: 44px;
+            height: 44px;
+            cursor: pointer;
+            font-size: 20px;
+            color: aliceblue;
+            margin: 3px;
+            border: none;
+            border-radius: 6px;
+            transition: background-color 0.1s;
+        }
+
+        .botao:hover {
+            background-color: rgb(80, 80, 80);
+        }
+
+        .botao:active {
+            background-color: rgb(30, 30, 30);
+        }
+
+        p {
+            text-align: center;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        #resultado {
+            background-color: rgb(30, 30, 30);
+            color: aliceblue;
+            text-align: right;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 22px;
+            padding: 8px 10px;
+            margin: 4px;
+            margin-bottom: 8px;
+            overflow: hidden;
+            white-space: nowrap;
+            width: 169px;
+            overflow-x: auto;
+            border-radius: 6px;
+        }
+
+        .botaolimpar {
+            background-color: rgb(180, 60, 60);
+            width: 100%;
+            height: 40px;
+            cursor: pointer;
+            font-size: 18px;
+            color: aliceblue;
+            margin-top: 3px;
+            border: none;
+            border-radius: 6px;
+            transition: background-color 0.1s;
+        }
+
+        .botaolimpar:hover {
+            background-color: rgb(220, 80, 80);
+        }
+
+        .botaolimpar:active {
+            background-color: rgb(140, 40, 40);
+        }
+    </style>
+</head>
+<body>
+    <div class="fundo">
+        <h1>Calculadora</h1>
+        <div class="calculadora">
+            <p id="resultado">0</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th colspan="4"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><button class="botao" onclick="clicarBotao('7')">7</button></td>
+                        <td><button class="botao" onclick="clicarBotao('8')">8</button></td>
+                        <td><button class="botao" onclick="clicarBotao('9')">9</button></td>
+                        <td><button class="botao" onclick="clicarBotao('/')">/</button></td>
+                    </tr>
+                    <tr>
+                        <td><button class="botao" onclick="clicarBotao('4')">4</button></td>
+                        <td><button class="botao" onclick="clicarBotao('5')">5</button></td>
+                        <td><button class="botao" onclick="clicarBotao('6')">6</button></td>
+                        <td><button class="botao" onclick="clicarBotao('*')">*</button></td>
+                    </tr>
+                    <tr>
+                        <td><button class="botao" onclick="clicarBotao('1')">1</button></td>
+                        <td><button class="botao" onclick="clicarBotao('2')">2</button></td>
+                        <td><button class="botao" onclick="clicarBotao('3')">3</button></td>
+                        <td><button class="botao" onclick="clicarBotao('-')">-</button></td>
+                    </tr>
+                    <tr>
+                        <td><button class="botao" onclick="clicarBotao('0')">0</button></td>
+                        <td><button class="botao" onclick="clicarBotao('.')">.</button></td>
+                        <td><button class="botao" onclick="clicarBotao('=')">=</button></td>
+                        <td><button class="botao" onclick="clicarBotao('+')">+</button></td>
+                    </tr>
+                    <tr>
+                        <td colspan="4"><button class="botaolimpar" onclick="clicarBotao('Clear')">Limpar</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        let primeiroValor = ''
+        let segundoValor = ''
+        let operador = ''
+        let acabouDeCalcular = false
+        let resultado = document.getElementById('resultado')
+
+        function calcular() {
+            const a = Number(primeiroValor)
+            const b = Number(segundoValor)
+
+            if (operador === '+') return a + b
+            if (operador === '-') return a - b
+            if (operador === '*') return a * b
+            if (operador === '/') {
+                if (b === 0) return 'Erro'
+                return a / b
+            }
+        }
+
+        function clicarBotao(valor) {
+            const ehNumero = !isNaN(valor) || valor === '.'
+
+            if (ehNumero) {
+                if (acabouDeCalcular) {
+                    primeiroValor = ''
+                    segundoValor = ''
+                    operador = ''
+                    acabouDeCalcular = false
+                }
+
+                if (operador === '') {
+                    if (valor === '.' && primeiroValor.includes('.')) return
+                    if (valor === '.' && primeiroValor === '') primeiroValor = '0'
+                    primeiroValor += valor
+                } else {
+                    if (valor === '.' && segundoValor.includes('.')) return
+                    if (valor === '.' && segundoValor === '') segundoValor = '0'
+                    segundoValor += valor
+                }
+
+            } else if (valor === 'Clear') {
+                primeiroValor = ''
+                segundoValor = ''
+                operador = ''
+                acabouDeCalcular = false
+                resultado.textContent = '0'
+                return
+
+            } else if (valor === '=') {
+                if (primeiroValor === '' || segundoValor === '') return
+
+                const calc = calcular()
+
+                if (calc === 'Erro') {
+                    resultado.textContent = 'Erro: ÷0'
+                    primeiroValor = ''
+                    segundoValor = ''
+                    operador = ''
+                    return
+                }
+
+                const arredondado = parseFloat(calc.toFixed(10))
+                resultado.textContent = arredondado
+                primeiroValor = String(arredondado)
+                segundoValor = ''
+                operador = ''
+                acabouDeCalcular = true
+                return
+
+            } else {
+                if (primeiroValor === '') return
+
+                if (segundoValor !== '') {
+                    const calc = calcular()
+                    if (calc === 'Erro') {
+                        resultado.textContent = 'Erro: ÷0'
+                        primeiroValor = ''
+                        segundoValor = ''
+                        operador = ''
+                        return
+                    }
+                    const arredondado = parseFloat(calc.toFixed(10))
+                    primeiroValor = String(arredondado)
+                    segundoValor = ''
+                }
+
+                acabouDeCalcular = false
+                operador = valor
+            }
+
+            resultado.textContent = `${primeiroValor}${operador}${segundoValor}`
+        }
+    </script>
+</body>
+</html>
